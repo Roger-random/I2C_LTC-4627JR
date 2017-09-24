@@ -46,7 +46,7 @@
 #include "mcc_generated_files/mcc.h"
 
 // Local variables
-static uint8_t digitPatterns[] = {0x04, 0x03, 0x02, 0x01, 0x00};
+static uint8_t digitPatterns[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
 void nextDigit(void)
 {
