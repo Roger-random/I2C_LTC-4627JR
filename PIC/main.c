@@ -48,7 +48,7 @@
 // Local variables
 static uint8_t digitPatterns[] = {0x04, 0x03, 0x02, 0x01, 0x00};
 
-void nextDigit()
+void nextDigit(void)
 {
     static uint8_t digit = 0;
 
@@ -108,10 +108,10 @@ void main(void)
     // Use the following macros to:
 
     // Enable the Global Interrupts
-    //INTERRUPT_GlobalInterruptEnable();
+    INTERRUPT_GlobalInterruptEnable();
 
     // Enable the Peripheral Interrupts
-    //INTERRUPT_PeripheralInterruptEnable();
+    INTERRUPT_PeripheralInterruptEnable();
 
     // Disable the Global Interrupts
     //INTERRUPT_GlobalInterruptDisable();
@@ -122,7 +122,6 @@ void main(void)
     while (1)
     {
         // Add your application code
-        nextDigit();
     }
 }
 /**
