@@ -69,7 +69,7 @@ void PIN_MANAGER_Initialize(void)
     ANSELx registers
     */   
     ANSELC = 0xFF;
-    ANSELB = 0xF0;
+    ANSELB = 0xA0;
     ANSELA = 0x37;
 
     /**
@@ -90,6 +90,23 @@ void PIN_MANAGER_Initialize(void)
 
    
     
+    
+    bool state = (unsigned char)GIE;
+    GIE = 0;
+    PPSLOCK = 0x55;
+    PPSLOCK = 0xAA;
+    PPSLOCKbits.PPSLOCKED = 0x00; // unlock PPS
+
+    SSP1DATPPSbits.SSP1DATPPS = 0x0C;   //RB4->MSSP1:SDA1;
+    SSP1CLKPPSbits.SSP1CLKPPS = 0x0E;   //RB6->MSSP1:SCL1;
+    RB4PPSbits.RB4PPS = 0x19;   //RB4->MSSP1:SDA1;
+    RB6PPSbits.RB6PPS = 0x18;   //RB6->MSSP1:SCL1;
+
+    PPSLOCK = 0x55;
+    PPSLOCK = 0xAA;
+    PPSLOCKbits.PPSLOCKED = 0x01; // lock PPS
+
+    GIE = state;
 }       
 
 void PIN_MANAGER_IOC(void)
