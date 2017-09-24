@@ -45,6 +45,57 @@
 
 #include "mcc_generated_files/mcc.h"
 
+// Local variables
+static uint8_t digitPatterns[] = {0x04, 0x03, 0x02, 0x01, 0x00};
+
+void nextDigit()
+{
+    static uint8_t digit = 0;
+
+    switch(digit)
+    {
+        case 0:
+            DIG_L_SetLow();
+            LATC = digitPatterns[0];
+            DIG_1_SetHigh();
+            digit = 1;
+            break;
+        case 1:
+            DIG_1_SetLow();
+            LATC = digitPatterns[1];
+            DIG_2_SetHigh();
+            digit = 2;
+            break;
+        case 2:
+            DIG_2_SetLow();
+            LATC = digitPatterns[2];
+            DIG_3_SetHigh();
+            digit = 3;
+            break;
+        case 3:
+            DIG_3_SetLow();
+            LATC = digitPatterns[3];
+            DIG_4_SetHigh();
+            digit = 4;
+            break;
+        case 4:
+            DIG_4_SetLow();
+            LATC = digitPatterns[4];
+            DIG_L_SetHigh();
+            digit = 0;
+            break;
+        default:
+            DIG_1_SetLow();
+            DIG_2_SetLow();
+            DIG_3_SetLow();
+            DIG_4_SetLow();
+            DIG_L_SetLow();
+            LATC = 0x0;
+            digit = 0;
+            break;
+    }
+}
+
 /*
                          Main application
  */
@@ -71,6 +122,7 @@ void main(void)
     while (1)
     {
         // Add your application code
+        nextDigit();
     }
 }
 /**
