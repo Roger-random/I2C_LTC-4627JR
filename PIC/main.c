@@ -46,8 +46,73 @@
 #include "mcc_generated_files/mcc.h"
 
 // Local variables
-static uint8_t digitPatterns[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
+// Value corresponding to each of the digits
+static uint8_t digitValues[] = {0, 0, 0, 0, 0};
+
+// Bit pattern to display each of the digits.
+static uint8_t digitPatterns[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
+// Lookup table to translate numbers/letters into LED bit patterns
+//
+// The bit pattern mimics the one defined in the MAX7219 driver chip
+//
+//        A
+//      -----
+//     |     |
+//   F |     | B            Byte
+//     |  G  |              MSB                LSB
+//      -----               7  6  5  4  3  2  1  0
+//     |     |              DP A  B  C  D  E  F  G
+//   E |     | C
+//     |     |
+//      -----
+//        D       DP
+//
+// Since the LTC-4627JR LED module is a common-anode design, each of the bit
+// controlling the segment is a cathode. Meaning the LED energizes when the
+// bit is set to zero.
+//  
+//   0xFF = everything is dark.       0x00 = all segments are illuminated.
+
+// Given a value in 0x0 - 0xF, decode into the bit pattern used to display that
+// digit.
+uint8_t decodeHex(uint8_t value)
+{
+    // 0000 0      0100 4      1000 8      1100 C
+    // 0001 1      0101 5      1001 9      1101 D
+    // 0010 2      0110 6      1010 A      1110 E
+    // 0011 3      0111 7      1011 B      1111 F
+    static uint8_t decoded[] = {
+        0x81, // 0 = 1000 0001 
+        0xCF, // 1 = 1100 1111
+        0x92, // 2 = 1001 0010
+        0x86, // 3 = 1000 0110
+        0xCC, // 4 = 1100 1100
+        0xA4, // 5 = 1010 0100
+        0xA0, // 6 = 1010 0000
+        0x8F, // 7 = 1000 1111
+        0x80, // 8 = 1000 0000
+        0x8C, // 9 = 1000 1100
+        0x88, // A = 1000 1000
+        0xE0, // B = 1110 0000
+        0xB1, // C = 1011 0001
+        0xC2, // D = 1100 0010
+        0xB0, // E = 1011 0000
+        0xB8  // F = 1011 1000
+    };
+    
+    if (value <= 0xF)
+    {
+        return decoded[value];
+    }
+    else
+    {
+        return 0xFF; // Active low means 0xFF is dark.
+    }
+}
+
+// Called by a timer ISR to illuminate another digit in the display.
 void nextDigit(void)
 {
     static uint8_t digit = 0;
@@ -101,6 +166,9 @@ void nextDigit(void)
  */
 void main(void)
 {
+    uint8_t value = 0;
+    uint8_t pattern = 0;
+
     // initialize the device
     SYSTEM_Initialize();
 
@@ -119,9 +187,58 @@ void main(void)
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
 
+    for (size_t digit = 0; digit < 4; digit++)
+    {
+        digitValues[digit] = digit;
+        digitPatterns[digit] = decodeHex(digit);
+    }
+    
     while (1)
     {
-        // Add your application code
+        for (size_t delay = 0; delay < 50000; delay++)
+        {
+            ;
+        }
+        
+        for (size_t digit = 0; digit < 4; digit++)
+        {
+            value = digitValues[digit];
+            
+            if (value >= 0xF)
+            {
+                value = 0;
+            }
+            else
+            {
+                value++;
+            }
+            
+            digitValues[digit] = value;
+            
+            pattern = decodeHex(value);
+            // Decimal point turned on every fourth digit.
+            if ((value & 0x3) == 0x3)
+            {
+                pattern &= 0x7F; // Set MSB to zero.
+            }
+            digitPatterns[digit] = pattern;
+        }
+        
+        // The three extra LEDs on "fifth digit" get a regular cycle pattern.
+        pattern = digitPatterns[4];
+        if (pattern == 0xBF)
+        {
+            pattern = 0xDF;
+        }
+        else if (pattern == 0xDF)
+        {
+            pattern = 0xEF;
+        }
+        else            
+        {
+            pattern = 0xBF;
+        }
+        digitPatterns[4] = pattern;
     }
 }
 /**
