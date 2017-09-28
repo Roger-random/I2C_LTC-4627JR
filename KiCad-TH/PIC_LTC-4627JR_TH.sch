@@ -331,22 +331,6 @@ Wire Wire Line
 	5300 3500 5300 4200
 Wire Wire Line
 	5300 4200 5750 4200
-Text Label 6050 2100 0    60   ~ 0
-SEG_G
-Text Label 6050 2400 0    60   ~ 0
-SEG_F
-Text Label 6050 2700 0    60   ~ 0
-SEG_E
-Text Label 6050 3000 0    60   ~ 0
-SEG_D
-Text Label 6050 3300 0    60   ~ 0
-SEG_C
-Text Label 6050 3600 0    60   ~ 0
-SEG_B
-Text Label 6050 3900 0    60   ~ 0
-SEG_A
-Text Label 6050 4200 0    60   ~ 0
-SEG_DP
 $Comp
 L VCC #PWR013
 U 1 1 59CC621C
@@ -489,40 +473,24 @@ DIG_3
 $Comp
 L LTC-4627JR L1
 U 1 1 59CC84A7
-P 6700 4950
-F 0 "L1" H 6700 5037 60  0000 C CNN
-F 1 "LTC-4627JR" H 6700 4931 60  0000 C CNN
-F 2 "" H 6700 4950 60  0001 C CNN
-F 3 "" H 6700 4950 60  0001 C CNN
-	1    6700 4950
+P 6050 5400
+F 0 "L1" H 6050 5487 60  0000 C CNN
+F 1 "LTC-4627JR" H 6050 5381 60  0000 C CNN
+F 2 "" H 6050 5400 60  0001 C CNN
+F 3 "" H 6050 5400 60  0001 C CNN
+	1    6050 5400
 	1    0    0    -1  
 $EndComp
-Text Label 6200 5150 2    60   ~ 0
+Text Label 5550 5600 2    60   ~ 0
 DIG_1
-Text Label 6200 5250 2    60   ~ 0
+Text Label 5550 5700 2    60   ~ 0
 DIG_2
-Text Label 6200 5350 2    60   ~ 0
+Text Label 5550 5800 2    60   ~ 0
 DIG_3
-Text Label 6200 5450 2    60   ~ 0
+Text Label 5550 5900 2    60   ~ 0
 DIG_4
-Text Label 6200 5550 2    60   ~ 0
+Text Label 5550 6000 2    60   ~ 0
 DIG_L
-Text Label 7200 5150 0    60   ~ 0
-SEG_DP
-Text Label 7200 5250 0    60   ~ 0
-SEG_A
-Text Label 7200 5350 0    60   ~ 0
-SEG_B
-Text Label 7200 5450 0    60   ~ 0
-SEG_C
-Text Label 7200 5550 0    60   ~ 0
-SEG_D
-Text Label 7200 5650 0    60   ~ 0
-SEG_E
-Text Label 7200 5750 0    60   ~ 0
-SEG_F
-Text Label 7200 5850 0    60   ~ 0
-SEG_G
 $Comp
 L PWR_FLAG #FLG01
 U 1 1 59CC9227
@@ -567,4 +535,52 @@ F 3 "" H 1850 4750 50  0001 C CNN
 	1    1850 4750
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	6550 5600 6700 5600
+Wire Wire Line
+	6700 5600 6700 4200
+Wire Wire Line
+	6700 4200 6050 4200
+Wire Wire Line
+	6550 5700 6800 5700
+Wire Wire Line
+	6800 5700 6800 3900
+Wire Wire Line
+	6800 3900 6050 3900
+Wire Wire Line
+	6550 5800 6900 5800
+Wire Wire Line
+	6900 5800 6900 3600
+Wire Wire Line
+	6900 3600 6050 3600
+Wire Wire Line
+	6550 5900 7000 5900
+Wire Wire Line
+	7000 5900 7000 3300
+Wire Wire Line
+	7000 3300 6050 3300
+Wire Wire Line
+	6550 6000 7100 6000
+Wire Wire Line
+	7100 6000 7100 3000
+Wire Wire Line
+	7100 3000 6050 3000
+Wire Wire Line
+	6550 6100 7200 6100
+Wire Wire Line
+	7200 6100 7200 2700
+Wire Wire Line
+	7200 2700 6050 2700
+Wire Wire Line
+	6550 6200 7300 6200
+Wire Wire Line
+	7300 6200 7300 2400
+Wire Wire Line
+	7300 2400 6050 2400
+Wire Wire Line
+	6550 6300 7400 6300
+Wire Wire Line
+	7400 6300 7400 2100
+Wire Wire Line
+	7400 2100 6050 2100
 $EndSCHEMATC
