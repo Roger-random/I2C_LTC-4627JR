@@ -1,4 +1,4 @@
-update=22/05/2015 07:44:53
+update=Wed 27 Sep 2017 05:20:01 PM PDT
 version=1
 last_client=kicad
 [general]
@@ -60,3 +60,5 @@ LibName26=opto
 LibName27=atmel
 LibName28=contrib
 LibName29=valves
+LibName30=microchip_pic16mcu
+LibName31=leds
