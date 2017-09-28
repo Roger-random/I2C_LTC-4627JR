@@ -1,4 +1,4 @@
-update=Wed 27 Sep 2017 05:20:01 PM PDT
+update=Wed 27 Sep 2017 07:12:53 PM PDT
 version=1
 last_client=kicad
 [general]
@@ -29,7 +29,7 @@ version=1
 NetIExt=net
 [eeschema]
 version=1
-LibDir=
+LibDir=library
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -61,4 +61,4 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=microchip_pic16mcu
-LibName31=leds
+LibName31=library/ltc-4627jr
