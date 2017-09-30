@@ -161,7 +161,7 @@ Wire Wire Line
 Wire Wire Line
 	1950 1650 1450 1650
 Wire Wire Line
-	1450 1550 1950 1550
+	1450 1550 2250 1550
 Wire Wire Line
 	1950 1550 1950 1450
 $Comp
@@ -718,4 +718,19 @@ Wire Wire Line
 	1700 3250 1700 3000
 Wire Wire Line
 	1700 3000 1500 3000
+$Comp
+L R R14
+U 1 1 59D0296A
+P 2400 1550
+F 0 "R14" V 2193 1550 50  0000 C CNN
+F 1 "10k" V 2284 1550 50  0000 C CNN
+F 2 "Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 2330 1550 50  0001 C CNN
+F 3 "" H 2400 1550 50  0001 C CNN
+	1    2400 1550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2550 1550 2950 1550
+Connection ~ 2950 1550
+Connection ~ 1950 1550
 $EndSCHEMATC
