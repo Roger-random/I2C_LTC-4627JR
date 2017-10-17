@@ -75,5 +75,7 @@ if __name__ == "__main__":
   print ()
   print ("Contro-C pressed, cleaning up and quitting.")
 
+  s.cancel()
+  led.cancel()
   pi.stop()
 
