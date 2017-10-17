@@ -85,6 +85,9 @@ typedef enum
 
 #define I2C1_SLAVE_DEFAULT_ADDRESS          0x42
 
+#define DISPLAY_BUFFER_SIZE 8
+
+
 /**
     @Summary
         Initializes and enables the i2c slave instance : 1
@@ -139,6 +142,7 @@ void I2C1_ISR ( void );
 
 extern volatile uint8_t    I2C1_slaveWriteData;
 
+void I2C1_CopyDisplayBuffer(uint8_t displayBuffer[]);
 
 #ifdef __cplusplus  // Provide C++ Compatibility
 

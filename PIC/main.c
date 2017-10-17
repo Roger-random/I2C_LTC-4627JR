@@ -47,8 +47,8 @@
 
 // Local variables
 
-// Value corresponding to each of the digits
-static uint8_t digitValues[] = {0, 0, 0, 0, 0};
+// Data received via I2C for what we should display
+static uint8_t displayBuffer[DISPLAY_BUFFER_SIZE];
 
 // Bit pattern to display each of the digits.
 static uint8_t digitPatterns[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -110,6 +110,33 @@ uint8_t decodeHex(uint8_t value)
     {
         return 0xFF; // Active low means 0xFF is dark.
     }
+}
+
+// Given a value in ASCII 0x00 - 0x7F, decode into the bit pattern used to
+// display that ASCII character. Given the limited nature of a 7-segment
+// LED only a few will return actual bit patterns. Most of them will return
+// the pattern for space (0xFF))
+uint8_t decodeASCII(uint8_t asciiValue)
+{
+    // Range of numbers 0-9
+    if (asciiValue >= 0x30 && asciiValue <= 0x39)
+    {
+        // Subtracting the ascii value of '0' returns hex index for decodeHex
+        return decodeHex(asciiValue - 0x30);
+    }
+    // Range of uppercase letters A-F
+    if (asciiValue >= 0x41 && asciiValue <= 0x46)
+    {
+        // Subtracting the ascii of 'A' plus 10 returns hex index for decodeHex.
+        return decodeHex(asciiValue - 0x41 + 10);
+    }
+    // Range of lowercase letters A-F
+    if (asciiValue >= 0x61 && asciiValue <= 0x66)
+    {
+        // Subtracting the ascii of 'a' plus 10 returns hex index for decodeHex.
+        return decodeHex(asciiValue - 0x61 + 10);
+    }
+    return 0xFF; // Blank space
 }
 
 // Called by a timer ISR to illuminate another digit in the display.
@@ -187,58 +214,16 @@ void main(void)
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
 
-    for (size_t digit = 0; digit < 4; digit++)
+    I2C1_CopyDisplayBuffer(displayBuffer);
+
+    for(size_t digit=0; digit < 4; digit++)
     {
-        digitValues[digit] = digit;
-        digitPatterns[digit] = decodeHex(digit);
+        digitPatterns[digit] = decodeASCII(displayBuffer[digit]);
     }
     
     while (1)
     {
-        for (size_t delay = 0; delay < 50000; delay++)
-        {
-            ;
-        }
         
-        for (size_t digit = 0; digit < 4; digit++)
-        {
-            value = digitValues[digit];
-            
-            if (value >= 0xF)
-            {
-                value = 0;
-            }
-            else
-            {
-                value++;
-            }
-            
-            digitValues[digit] = value;
-            
-            pattern = decodeHex(value);
-            // Decimal point turned on every fourth digit.
-            if ((value & 0x3) == 0x3)
-            {
-                pattern &= 0x7F; // Set MSB to zero.
-            }
-            digitPatterns[digit] = pattern;
-        }
-        
-        // The three extra LEDs on "fifth digit" get a regular cycle pattern.
-        pattern = digitPatterns[4];
-        if (pattern == 0xBF)
-        {
-            pattern = 0xDF;
-        }
-        else if (pattern == 0xDF)
-        {
-            pattern = 0xEF;
-        }
-        else            
-        {
-            pattern = 0xBF;
-        }
-        digitPatterns[4] = pattern;
     }
 }
 /**
