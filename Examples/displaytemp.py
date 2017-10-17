@@ -68,7 +68,7 @@ if __name__ == "__main__":
           print("PIC has reset, waiting to retry.")
         else:
           raise
-      time.sleep(0.25)
+      time.sleep(0.1)
   except KeyboardInterrupt:
     pass
     
