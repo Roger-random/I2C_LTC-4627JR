@@ -193,8 +193,7 @@ void nextDigit(void)
  */
 void main(void)
 {
-    uint8_t value = 0;
-    uint8_t pattern = 0;
+    size_t dataIndex = 0;
 
     // initialize the device
     SYSTEM_Initialize();
@@ -214,16 +213,46 @@ void main(void)
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
 
-    I2C1_CopyDisplayBuffer(displayBuffer);
-
-    for(size_t digit=0; digit < 4; digit++)
-    {
-        digitPatterns[digit] = decodeASCII(displayBuffer[digit]);
-    }
+    digitPatterns[0] = 0xC9; // Nonstandard "II" in a single digit
+    digitPatterns[1] = decodeASCII('C');
+    digitPatterns[2] = decodeASCII('4');
+    digitPatterns[3] = decodeASCII('2');
+    digitPatterns[4] = 0xFF;
     
     while (1)
     {
-        
+        if(I2C1_DataAvailable())
+        {
+            I2C1_CopyDisplayBuffer(displayBuffer);
+
+            // Digit 5 are dark unless specifically illuminated
+            digitPatterns[4] = 0xFF;
+
+            dataIndex = 0;
+            for (size_t digit = 0; digit < 4; digit++)
+            {
+                digitPatterns[digit] = decodeASCII(displayBuffer[dataIndex]);
+                dataIndex++;
+                if (displayBuffer[dataIndex]=='.')
+                {
+                    // Light up the decimal point
+                    digitPatterns[digit] = digitPatterns[digit] & 0x7F;
+                    dataIndex++;
+                }
+                if (digit==1 && displayBuffer[dataIndex]==':')
+                {
+                    // Light up the colon
+                    digitPatterns[4] = digitPatterns[4] & 0x9F;
+                    dataIndex++;
+                }
+                if (digit==2 && (displayBuffer[dataIndex]=='\'') || (displayBuffer[dataIndex]=='`'))
+                {
+                    // Light up the upper dot thingie
+                    digitPatterns[4] = digitPatterns[4] & 0xEF;
+                    dataIndex++;
+                }
+            }
+        }
     }
 }
 /**

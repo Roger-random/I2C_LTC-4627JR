@@ -85,7 +85,7 @@ typedef enum
 
 #define I2C1_SLAVE_DEFAULT_ADDRESS          0x42
 
-#define DISPLAY_BUFFER_SIZE 8
+#define DISPLAY_BUFFER_SIZE 10
 
 
 /**
@@ -142,7 +142,10 @@ void I2C1_ISR ( void );
 
 extern volatile uint8_t    I2C1_slaveWriteData;
 
-void I2C1_CopyDisplayBuffer(uint8_t displayBuffer[]);
+extern uint8_t i2c1WriteComplete = 0;
+
+void    I2C1_CopyDisplayBuffer(uint8_t displayBuffer[]);
+uint8_t I2C1_DataAvailable();
 
 #ifdef __cplusplus  // Provide C++ Compatibility
 

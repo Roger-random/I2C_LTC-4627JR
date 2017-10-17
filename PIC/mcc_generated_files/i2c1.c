@@ -215,6 +215,9 @@ void I2C1_StatusCallback(I2C1_SLAVE_DRIVER_STATUS i2c_bus_state)
             } // end switch(slaveWriteType)
 
             slaveWriteType  = SLAVE_NORMAL_DATA;
+
+            // Raise flag marking write complete operation
+            i2c1WriteComplete = 1;
             break;
 
         case I2C1_SLAVE_READ_REQUEST:
@@ -234,8 +237,15 @@ void I2C1_StatusCallback(I2C1_SLAVE_DRIVER_STATUS i2c_bus_state)
 
 void I2C1_CopyDisplayBuffer(uint8_t displayBuffer[])
 {
+    i2c1WriteComplete = 0;
+
     for (size_t index = 0; index < DISPLAY_BUFFER_SIZE; index++)
     {
         displayBuffer[index] = EEPROM_Buffer[index];
     }
+}
+
+uint8_t I2C1_DataAvailable()
+{
+    return i2c1WriteComplete;
 }
